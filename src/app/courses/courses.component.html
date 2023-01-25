@@ -1,0 +1,32 @@
+<div>
+    <app-search (searchTextChanged)="onSearchTextEntered($event)"></app-search>
+    <app-filter 
+    [all]="getTotalCourses()"
+    [available]="getTotalAvailable()"
+    [notavailable]="getTotalNotAvailable()"
+    (filterRadioButtonSelectionChanged)="onfilterRadioButtonChanged($event)"></app-filter>
+</div>
+
+<ng-container *ngFor="let p of products">
+    <!-- courseCountRadioButton === 'All' || courseCountRadioButton === p.available -->
+    <div *ngIf="searchText === '' || p.name.toLowerCase().includes(searchText)">
+        <div class="product-container" [ngStyle]="{backgroundColor : p.available === 'Available' ? '#D5F5E3' : '#FADBD8'}">
+            <div class="image-container"><img [src]="p.image" alt="" style="max-height: 50px; max-width: 50px"></div>
+            <div>
+                <div class="name-container"><h6>{{ p.name }}</h6></div>
+                <div class="detailContainer">
+                    <div class="details" [ngStyle]="{color : p.available === 'Available' ? 'Green' : 'Red'}">{{ p.available }}</div>
+                    <div class="details">Price:<b>${{ p.price }}</b></div>
+                    <div class="details">Color:<b>{{ p.color }}</b></div>
+                </div>
+            </div>
+            <div class="options">
+                <button class="btn btn-success">Show Details</button>
+                <button class="btn btn-warning" *ngIf="p.available === 'Available'; else notifyme">Buy Now</button>
+                <ng-template #notifyme>
+                    <button class="btn btn-danger">Notify</button>                
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</ng-container>
